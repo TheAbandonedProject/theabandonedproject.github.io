@@ -1,0 +1,50 @@
+name: Verify and deploy publication images
+
+# Deploys ONLY if every image passes verify_images.py (no metadata, hash-named, listed). The site is built from an
+# artifact containing just i/ and robots.txt, so manifest.json and the repository history are never served.
+on:
+  push:                     # verify runs on EVERY branch; only main can deploy (see the deploy job)
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python verify_images.py
+
+  deploy:
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble the public site (images and robots.txt only)
+        run: |
+          mkdir site
+          cp -r i site/i
+          rm -f site/i/.gitkeep
+          cp robots.txt site/robots.txt
+          touch site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
