@@ -14,7 +14,7 @@ The first push to a new Pages repo auto-enables a legacy "publish the whole bran
 
 ## Publishing one approved derivative
 `python tools/publish_derivative.py --repo-dir <clone of this repo> DERIVATIVE.jpg --alt "..." [--caption "..."] [--push]`
-Dry run by default: it verifies, copies, updates the manifest and commits locally; `--push` sends it. The public URL is `https://<owner>.github.io/<repo>/i/<file>`.
+Dry run by default: it verifies, copies, updates the manifest and commits locally; `--push` sends it. The public URL is `https://theabandonedproject.github.io/i/<file>` (an organization site, so no repo segment).
 
 ## Removing an image
 `python tools/retire_derivative.py --repo-dir <clone> FILE.jpg [--push]` (dry run by default). Measured takedown: the exact URL returned 404 within 37 seconds of the push.
