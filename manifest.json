@@ -1,10 +1,3 @@
 {
- "images": [
-  {
-   "file": "hosttest-bd805e6c4f.jpg",
-   "alt": "Synthetic test image (validation only)",
-   "caption": "Hosting test T-H1",
-   "approved_on": "2026-09-20"
-  }
- ]
+ "images": []
 }
